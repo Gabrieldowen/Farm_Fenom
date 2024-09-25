@@ -1,10 +1,16 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <vector>
 
 #include "RenderWindow.hpp"
+#include "Entity.hpp"
 
 using namespace std;
+
+int WINDOW_WIDTH = 1280;
+int WINDOW_HEIGHT = 720;
+
 
 int main(int argv, char* args[]) {
 
@@ -18,19 +24,40 @@ int main(int argv, char* args[]) {
         return EXIT_FAILURE;
     }
 
-    RenderWindow window("Hello World", 1280, 720);
+    // LOAD IN ITEMS
+    RenderWindow window("SDL2 with C++ game", WINDOW_WIDTH, WINDOW_HEIGHT);
+    SDL_Texture* topDirtTexture = window.loadTexture("res/images/top_dirt_layer.png");
 
+
+    std::vector<Entity> topSoil = {};
+
+    for(int i = 0; i <WINDOW_WIDTH; i += 32){
+        topSoil.push_back(Entity(i, WINDOW_HEIGHT/4 - 32, topDirtTexture));
+    }
 
     bool isRunning = true;
     SDL_Event event;
 
     // GAME LOOP
     while(isRunning){
+        // get controls and events
         while(SDL_PollEvent(&event)){
             if(event.type == SDL_QUIT){
                 isRunning = false;
             }
+            
         }
+
+        window.clear();
+        
+
+        for(Entity& e : topSoil){
+            window.render(e);
+        }
+
+        window.display();
+
+
     }
 
 
