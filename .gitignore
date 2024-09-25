@@ -25,3 +25,4 @@ libSDL2_ttf.a
 # Generated files
 CMakeLists.txt.user
 Makefile
+/src/main.dSYM
