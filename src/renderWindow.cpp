@@ -4,6 +4,7 @@
 
 #include "Entity.hpp"
 #include "RenderWindow.hpp"
+#include "Math.hpp"
 
 RenderWindow::RenderWindow(const char* p_title, int p_w, int p_h) 
     : window(NULL), renderer(NULL)
@@ -13,7 +14,7 @@ RenderWindow::RenderWindow(const char* p_title, int p_w, int p_h)
     if (window == NULL) {
         std::cout << "Window failed to initialize: " << SDL_GetError() << std::endl;
     }
-
+    // creates the renderer and VSYNC syncs it with the screen refresh rate
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 }
 
@@ -26,6 +27,16 @@ SDL_Texture* RenderWindow::loadTexture(const char* p_filePath){
         std::cout << "failed to load the texture because: " << SDL_GetError() << std::endl; 
 
     return texture;
+}
+
+int RenderWindow::getRefreshRate(){
+    int displayIndex = SDL_GetWindowDisplayIndex( window );
+
+    SDL_DisplayMode mode;
+
+    SDL_GetDisplayMode(displayIndex, 0, &mode);
+
+    return mode.refresh_rate;
 }
 
 
@@ -49,10 +60,10 @@ void RenderWindow::render(Entity& p_entity){
 
 
     SDL_Rect dst;
-    dst.x = p_entity.getX() * 4;
-    dst.y = p_entity.getY() * 4;
-    dst.w = p_entity.getCurrentFrame().w * 4;
-    dst.h = p_entity.getCurrentFrame().h * 4;
+    dst.x = p_entity.getPos().x * 4;
+    dst.y = p_entity.getPos().y * 4;
+    dst.w = p_entity.getCurrentFrame().w * p_entity.getSpriteScale();
+    dst.h = p_entity.getCurrentFrame().h * p_entity.getSpriteScale();
 
     // (renderer, texture file, source of texture, texture transformation)
     SDL_RenderCopy(renderer, p_entity.getTex(), &src, &dst);
