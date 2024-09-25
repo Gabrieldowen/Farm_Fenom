@@ -1,0 +1,27 @@
+# Compiled object files
+*.o
+*.obj
+
+# Executables
+*.exe
+*.out
+
+# Build directory
+build/
+
+# SDL2 libraries
+libSDL2.a
+libSDL2main.a
+
+# SDL2 image libraries
+libSDL2_image.a
+
+# SDL2 mixer libraries
+libSDL2_mixer.a
+
+# SDL2 ttf libraries
+libSDL2_ttf.a
+
+# Generated files
+CMakeLists.txt.user
+Makefile
