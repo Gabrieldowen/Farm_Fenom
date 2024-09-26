@@ -101,9 +101,16 @@ int main(int argv, char* args[]) {
         // Move the character based on key presses
         if (keystates[SDL_SCANCODE_W]) {  // Move up
             player1.update(deltaTime, Vector2f(0, -1));
+            if (frameCount % 10 == 0){
+                player1.setCurrentFrameX((player1.getCurrentFrame().x + 32)%224);
+            }
+            
         }
         if (keystates[SDL_SCANCODE_S]) {  // Move down
             player1.update(deltaTime, Vector2f(0, 1));
+            if (frameCount % 10 == 0){
+                player1.setCurrentFrameX((player1.getCurrentFrame().x + 32)%224);
+            }
         }
         if (keystates[SDL_SCANCODE_A]) {  // Move left
             player1.update(deltaTime, Vector2f(-1, 0));
@@ -119,6 +126,9 @@ int main(int argv, char* args[]) {
                 player1.setCurrentFrameY(32);
                 player1.setCurrentFrameX((player1.getCurrentFrame().x + 32)%224);
             }
+        }
+        if(!keystates[SDL_SCANCODE_W] && !keystates[SDL_SCANCODE_A] && !keystates[SDL_SCANCODE_S] && !keystates[SDL_SCANCODE_D]){
+            player1.setCurrentFrameX(0);
         }
     
 
