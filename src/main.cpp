@@ -62,13 +62,16 @@ int main(int argv, char* args[]) {
     float accumulator = 0.0f;
     float currentTime = utils::hireTimeInSeconds();
 
+    int frameCount = 0;
+
     // GAME LOOP
     while(isRunning){
         
         int startTicks = SDL_GetTicks();
         float newTime = utils::hireTimeInSeconds();
         float deltaTime = newTime - currentTime;
-        
+
+
         currentTime = newTime;
 
         accumulator += deltaTime;
@@ -104,10 +107,20 @@ int main(int argv, char* args[]) {
         }
         if (keystates[SDL_SCANCODE_A]) {  // Move left
             player1.update(deltaTime, Vector2f(-1, 0));
+            if (frameCount % 10 == 0){
+                player1.setCurrentFrameY(0);
+                player1.setCurrentFrameX((player1.getCurrentFrame().x + 32)%224);
+            }
         }
         if (keystates[SDL_SCANCODE_D]) {  // Move right
             player1.update(deltaTime, Vector2f(1, 0));
+
+            if (frameCount % 10 == 0){
+                player1.setCurrentFrameY(32);
+                player1.setCurrentFrameX((player1.getCurrentFrame().x + 32)%224);
+            }
         }
+    
 
 
 
@@ -126,7 +139,6 @@ int main(int argv, char* args[]) {
         window.render(player1);
         
 
-        // std::cout << utils::hireTimeInSeconds() << std::endl;
 
         window.display();
 
@@ -134,6 +146,8 @@ int main(int argv, char* args[]) {
         int frameTicks = SDL_GetTicks() - startTicks;
         if(frameTicks < 1000 / window.getRefreshRate())
             SDL_Delay( 1000 / window.getRefreshRate() - frameTicks);
+
+        frameCount++;
 
     }
 

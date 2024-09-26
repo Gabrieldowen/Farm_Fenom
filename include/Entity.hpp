@@ -30,10 +30,19 @@ class Entity
             pos = newPos;
         }
 
+        void setCurrentFrameX(int x){
+            currentFrame.x = x;
+        }
+        void setCurrentFrameY(int y){
+            currentFrame.y = y;
+        }
+
 
         void update(float deltaTime, Vector2f direction){
             pos.x += direction.x * velocity * deltaTime;
             pos.y += direction.y * velocity * deltaTime;
+
+
 
         }
 
@@ -55,9 +64,13 @@ class Player : public Entity {
         }   
     
         void update(float deltaTime, Vector2f direction){
+            directionVector = direction;
+
+            // move the player
             pos.x += direction.x * velocity * deltaTime;
             pos.y += direction.y * velocity * deltaTime;
 
+            // bounds for the player
             if(pos.x < 0) pos.x = 0;    //
             if(pos.x > WINDOW_WIDTH / spriteScale - currentFrame.w) pos.x = (WINDOW_WIDTH / spriteScale - currentFrame.w);
             if(pos.y < GROUND_TOP - currentFrame.h) pos.y = GROUND_TOP - currentFrame.h; //
@@ -66,4 +79,7 @@ class Player : public Entity {
             pos.print();
 
         }
+
+        private:
+            Vector2f directionVector;
 };
