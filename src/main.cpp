@@ -7,11 +7,10 @@
 #include "Entity.hpp"
 #include "Math.hpp"
 #include "Utils.hpp"
+#include "Settings.hpp"
 
 using namespace std;
 
-int WINDOW_WIDTH = 1280;
-int WINDOW_HEIGHT = 720;
 
 
 int main(int argv, char* args[]) {
@@ -32,19 +31,24 @@ int main(int argv, char* args[]) {
     // load images
     SDL_Texture* topDirtTexture = window.loadTexture("res/images/top_dirt_layer.png");
     SDL_Texture* skyTexture = window.loadTexture("res/images/sky.png");
-    SDL_Texture* strawBarryTexture = window.loadTexture("res/images/straw_barry.png");
+    SDL_Texture* playerOneTexture = window.loadTexture("res/images/player_1.png");
+    SDL_Texture* cloudTexture = window.loadTexture("res/images/cloud.png");
+
 
 
 
     //create entitites with the images/textures
     std::vector<Entity> topSoil = {};
     for(int i = 0; i <WINDOW_WIDTH; i += 32){
-        topSoil.push_back(Entity(Vector2f(i, WINDOW_HEIGHT/4 - 32), topDirtTexture));
+        topSoil.push_back(Entity(Vector2f(i, GROUND_TOP), topDirtTexture));
     }
 
     Entity sky(Vector2f(0, 0), skyTexture, 128);
 
-    Entity strawBarry(Vector2f(32, WINDOW_HEIGHT/4 - 64), strawBarryTexture);
+    Player player1(Vector2f(32, WINDOW_HEIGHT/4 - 64), playerOneTexture);
+
+    Entity cloud(Vector2f(4, 4), cloudTexture, 8);
+
 
 
 
@@ -63,11 +67,12 @@ int main(int argv, char* args[]) {
         
         int startTicks = SDL_GetTicks();
         float newTime = utils::hireTimeInSeconds();
-        float framteTime = newTime - currentTime;
+        float deltaTime = newTime - currentTime;
         
         currentTime = newTime;
 
-        accumulator += framteTime;
+        accumulator += deltaTime;
+
 
         while(accumulator >= timeStep){
  
@@ -78,29 +83,6 @@ int main(int argv, char* args[]) {
                     case SDL_QUIT:
                         isRunning = false;
                         break;
-
-                    /* Look for a keypress */
-                    case SDL_KEYDOWN:
-                        /* Check the SDLKey values and move change the coords */
-                        Vector2f v = strawBarry.getPos();
-
-                        switch( event.key.keysym.sym ){
-                            case SDLK_LEFT:
-                                v.x -= 2;
-                                strawBarry.setPos(v);
-                                break;
-                            case SDLK_RIGHT:
-                                v.x += 2;
-                                strawBarry.setPos(v);
-                                break;
-                            case SDLK_UP:
-                                break;
-                            case SDLK_DOWN:
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
                 }
             
                 
@@ -109,6 +91,24 @@ int main(int argv, char* args[]) {
         }
         // gets the remainder
         // const float alpha = accumulator / timeStep;
+
+        // Get the current state of the keyboard
+        const Uint8* keystates = SDL_GetKeyboardState(NULL);
+
+        // Move the character based on key presses
+        if (keystates[SDL_SCANCODE_W]) {  // Move up
+            player1.update(deltaTime, Vector2f(0, -1));
+        }
+        if (keystates[SDL_SCANCODE_S]) {  // Move down
+            player1.update(deltaTime, Vector2f(0, 1));
+        }
+        if (keystates[SDL_SCANCODE_A]) {  // Move left
+            player1.update(deltaTime, Vector2f(-1, 0));
+        }
+        if (keystates[SDL_SCANCODE_D]) {  // Move right
+            player1.update(deltaTime, Vector2f(1, 0));
+        }
+
 
 
         window.clear();
@@ -121,7 +121,9 @@ int main(int argv, char* args[]) {
             window.render(e);
         }
 
-        window.render(strawBarry);
+        window.render(cloud);
+
+        window.render(player1);
         
 
         // std::cout << utils::hireTimeInSeconds() << std::endl;

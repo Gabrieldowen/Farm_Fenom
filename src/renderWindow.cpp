@@ -53,15 +53,18 @@ void RenderWindow::render(Entity& p_entity){
 
     // represents the actual size of the texture/image
     SDL_Rect src;
+    // what position do you want to start at in the texture
     src.x = p_entity.getCurrentFrame().x;
     src.y =  p_entity.getCurrentFrame().y;
+
+    // how much from the position do you want to crop into for this sprite
     src.w =  p_entity.getCurrentFrame().w;
     src.h =  p_entity.getCurrentFrame().h;
 
 
     SDL_Rect dst;
-    dst.x = p_entity.getPos().x * 4;
-    dst.y = p_entity.getPos().y * 4;
+    dst.x = p_entity.getPos().x * p_entity.getSpriteScale();
+    dst.y = p_entity.getPos().y * p_entity.getSpriteScale();
     dst.w = p_entity.getCurrentFrame().w * p_entity.getSpriteScale();
     dst.h = p_entity.getCurrentFrame().h * p_entity.getSpriteScale();
 
