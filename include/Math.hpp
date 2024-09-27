@@ -1,6 +1,7 @@
 #pragma once 
 
 #include <iostream>
+#include <cmath>
 
 struct Vector2f
 {
@@ -20,6 +21,14 @@ struct Vector2f
     void add(Vector2f p_v){
         x += p_v.x;
         y += p_v.y;
+    }
+
+    void normalize(){
+        float length = std::sqrt(x * x + y * y);
+        if(length != 0){
+            x /= length;
+            x /= length;
+        }
     }
 
     float x, y;

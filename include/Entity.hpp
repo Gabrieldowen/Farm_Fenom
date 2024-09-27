@@ -63,12 +63,12 @@ class Player : public Entity {
             std::cout << "player created" << std::endl;
         }   
     
-        void update(float deltaTime, Vector2f direction){
-            directionVector = direction;
-
+        void update(float deltaTime, int frameCount){
+            
             // move the player
-            pos.x += direction.x * velocity * deltaTime;
-            pos.y += direction.y * velocity * deltaTime;
+            directionVector.normalize();
+            pos.x += directionVector.x * velocity * deltaTime;
+            pos.y += directionVector.y * velocity * deltaTime;
 
             // bounds for the player
             if(pos.x < 0) pos.x = 0;    //
@@ -76,8 +76,32 @@ class Player : public Entity {
             if(pos.y < GROUND_TOP - currentFrame.h) pos.y = GROUND_TOP - currentFrame.h; //
             if(pos.y > WINDOW_HEIGHT / spriteScale - currentFrame.h) pos.y = (WINDOW_HEIGHT / spriteScale - currentFrame.h);
 
-            pos.print();
+            // cycle through animation
+            if (frameCount % 10 == 0){
+                // switches animation based on direction
+                if(directionVector.x > 0){
+                    setCurrentFrameY(32);
+                }
+                else if(directionVector.x < 0){
+                    setCurrentFrameY(0);
+                }
+                
+                // if moving rotate
+                if(directionVector.y != 0 || directionVector.x != 0){
+                    setCurrentFrameX((getCurrentFrame().x + 32)%224);
+                }
+                else{
+                    setCurrentFrameX(0);
+                }
+            }
 
+            // reset direction vector after moving in that direction
+            directionVector = Vector2f(0, 0);
+
+        }
+
+        void addDirectionVector(Vector2f v){
+            directionVector.add(v);
         }
 
         private:

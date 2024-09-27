@@ -98,41 +98,21 @@ int main(int argv, char* args[]) {
         // Get the current state of the keyboard
         const Uint8* keystates = SDL_GetKeyboardState(NULL);
 
-        // Move the character based on key presses
-        if (keystates[SDL_SCANCODE_W]) {  // Move up
-            player1.update(deltaTime, Vector2f(0, -1));
-            if (frameCount % 10 == 0){
-                player1.setCurrentFrameX((player1.getCurrentFrame().x + 32)%224);
-            }
-            
-        }
-        if (keystates[SDL_SCANCODE_S]) {  // Move down
-            player1.update(deltaTime, Vector2f(0, 1));
-            if (frameCount % 10 == 0){
-                player1.setCurrentFrameX((player1.getCurrentFrame().x + 32)%224);
-            }
-        }
-        if (keystates[SDL_SCANCODE_A]) {  // Move left
-            player1.update(deltaTime, Vector2f(-1, 0));
-            if (frameCount % 10 == 0){
-                player1.setCurrentFrameY(0);
-                player1.setCurrentFrameX((player1.getCurrentFrame().x + 32)%224);
-            }
-        }
-        if (keystates[SDL_SCANCODE_D]) {  // Move right
-            player1.update(deltaTime, Vector2f(1, 0));
+        // set character direction based on keys pressed
+        if (keystates[SDL_SCANCODE_W]) player1.addDirectionVector(Vector2f(0, -1));
 
-            if (frameCount % 10 == 0){
-                player1.setCurrentFrameY(32);
-                player1.setCurrentFrameX((player1.getCurrentFrame().x + 32)%224);
-            }
-        }
+        if (keystates[SDL_SCANCODE_A]) player1.addDirectionVector(Vector2f(-1, 0));
+        
+        if (keystates[SDL_SCANCODE_S]) player1.addDirectionVector(Vector2f(0, 1));
+        
+        if (keystates[SDL_SCANCODE_D]) player1.addDirectionVector(Vector2f(1, 0));
+        
         if(!keystates[SDL_SCANCODE_W] && !keystates[SDL_SCANCODE_A] && !keystates[SDL_SCANCODE_S] && !keystates[SDL_SCANCODE_D]){
-            player1.setCurrentFrameX(0);
+            player1.addDirectionVector(Vector2f(0, 0));
         }
     
 
-
+        player1.update(deltaTime, frameCount);
 
         window.clear();
         
