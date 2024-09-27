@@ -22,6 +22,10 @@ struct Vector2f
         x += p_v.x;
         y += p_v.y;
     }
+    
+    Vector2f mult(float s){
+        return Vector2f(x*s, y*s);
+    }
 
     void normalize(){
         float length = std::sqrt(x * x + y * y);

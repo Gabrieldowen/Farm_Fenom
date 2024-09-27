@@ -63,8 +63,8 @@ void RenderWindow::render(Entity& p_entity){
 
 
     SDL_Rect dst;
-    dst.x = p_entity.getPos().x * p_entity.getSpriteScale();
-    dst.y = p_entity.getPos().y * p_entity.getSpriteScale();
+    dst.x = p_entity.getPos().x; //* p_entity.getSpriteScale();
+    dst.y = p_entity.getPos().y; // * p_entity.getSpriteScale();
     dst.w = p_entity.getCurrentFrame().w * p_entity.getSpriteScale();
     dst.h = p_entity.getCurrentFrame().h * p_entity.getSpriteScale();
 

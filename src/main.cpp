@@ -43,13 +43,14 @@ int main(int argv, char* args[]) {
 
     //create entitites with the images/textures
     std::vector<Entity> topSoil = {};
-    for(int i = 0; i <WINDOW_WIDTH; i += 32){
+    for(int i = 0; i <WINDOW_WIDTH; i += 128){
+        std::cout<< i <<std::endl;
         topSoil.push_back(Entity(Vector2f(i, GROUND_TOP), topDirtTexture));
     }
 
     std::vector<Plant> plants = {};
-    plants.push_back(Plant(Vector2f(0,GROUND_TOP*2 + 32), sproutTexture, 2));
-    plants.push_back(Plant(Vector2f(608, GROUND_TOP*2-32), sproutTexture, 2));
+    plants.push_back(Plant(Vector2f(0,GROUND_TOP - 64), sproutTexture, 2));
+    plants.push_back(Plant(Vector2f(WINDOW_WIDTH-64, WINDOW_HEIGHT-64), sproutTexture, 2));
 
 
 
@@ -58,7 +59,7 @@ int main(int argv, char* args[]) {
     Entity sky(Vector2f(0, 0), skyTexture, 128);
     Entity cloud(Vector2f(4, 4), cloudTexture, 8);
 
-    Player player1(Vector2f(32, WINDOW_HEIGHT/4 - 64), playerOneTexture);
+    Player player1(Vector2f(32, GROUND_TOP - 128), playerOneTexture);
 
 
 
@@ -121,21 +122,36 @@ int main(int argv, char* args[]) {
         }
 
         if(keystates[SDL_SCANCODE_SPACE]){
-            std::cout << "pickup plant" << std::endl;
+            for(Plant& p : plants){
+                
+                p.getPos().print();
+                player1.getPos().print();
+                std::cout << "done" << endl;
+                std::cout << endl;
+
+                if(p.getPos().x/2 <= player1.getPos().x - 54 
+                    && p.getPos().x/2 >= player1.getPos().x - 74
+                    && p.getPos().y/2 <= player1.getPos().y + 138 
+                    && p.getPos().y/2 >= player1.getPos().y + 118){
+                        std::cout << "plant picked" << std::endl;
+                        p.getPos().print();
+                        player1.getPos().print();
+                    }
+            }
         }
     
         player1.update(deltaTime, frameCount);
 
         //
         // SPAWN IN PLANTS
-        if(frameCount % 300 == 0){
-            int randX = (rand() % (WINDOW_WIDTH/2 - 1)) + 0;
-            int randY = (rand() % ((GROUND_TOP*2 + 32) - (GROUND_TOP*2-32) + 1)) + (GROUND_TOP*2-32);
+        // if(frameCount % 300 == 0){
+        //     int randX = (rand() % (WINDOW_WIDTH/2 - 1)) + 0;
+        //     int randY = (rand() % ((GROUND_TOP*2 + 32) - (GROUND_TOP*2-32) + 1)) + (GROUND_TOP*2-32);
 
-            std::cout << randX << ", " << randY << std::endl;
+        //     std::cout << randX << ", " << randY << std::endl;
 
-            plants.push_back(Plant(Vector2f(randX, randY), sproutTexture, 2));
-        }
+        //     plants.push_back(Plant(Vector2f(randX, randY), sproutTexture, 2));
+        // }
         //
         //
 
@@ -158,8 +174,6 @@ int main(int argv, char* args[]) {
 
         window.render(player1);
         
-
-
         window.display();
 
 

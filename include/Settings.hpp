@@ -4,6 +4,6 @@
 
 const int WINDOW_WIDTH = 1280;
 const int WINDOW_HEIGHT = 720;
-const int GROUND_TOP = WINDOW_HEIGHT/4 - 32;
+const int GROUND_TOP = 592; // window height - size of ground after scaling
 
 #endif 
