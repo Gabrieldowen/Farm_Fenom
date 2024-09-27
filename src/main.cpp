@@ -2,6 +2,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <vector>
+#include <cstdlib>
+
 
 #include "RenderWindow.hpp"
 #include "Entity.hpp"
@@ -25,6 +27,7 @@ int main(int argv, char* args[]) {
         return EXIT_FAILURE;
     }
 
+
     // LOAD IN ITEMS
     RenderWindow window("SDL2 with C++ game", WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -33,6 +36,7 @@ int main(int argv, char* args[]) {
     SDL_Texture* skyTexture = window.loadTexture("res/images/sky.png");
     SDL_Texture* playerOneTexture = window.loadTexture("res/images/player_1.png");
     SDL_Texture* cloudTexture = window.loadTexture("res/images/cloud.png");
+    SDL_Texture* sproutTexture = window.loadTexture("res/images/sprout_1.png");
 
 
 
@@ -43,13 +47,18 @@ int main(int argv, char* args[]) {
         topSoil.push_back(Entity(Vector2f(i, GROUND_TOP), topDirtTexture));
     }
 
+    std::vector<Plant> plants = {};
+    plants.push_back(Plant(Vector2f(0,GROUND_TOP*2 + 32), sproutTexture, 2));
+    plants.push_back(Plant(Vector2f(608, GROUND_TOP*2-32), sproutTexture, 2));
+
+
+
+
+
     Entity sky(Vector2f(0, 0), skyTexture, 128);
-
-    Player player1(Vector2f(32, WINDOW_HEIGHT/4 - 64), playerOneTexture);
-
     Entity cloud(Vector2f(4, 4), cloudTexture, 8);
 
-
+    Player player1(Vector2f(32, WINDOW_HEIGHT/4 - 64), playerOneTexture);
 
 
 
@@ -110,9 +119,26 @@ int main(int argv, char* args[]) {
         if(!keystates[SDL_SCANCODE_W] && !keystates[SDL_SCANCODE_A] && !keystates[SDL_SCANCODE_S] && !keystates[SDL_SCANCODE_D]){
             player1.addDirectionVector(Vector2f(0, 0));
         }
-    
 
+        if(keystates[SDL_SCANCODE_SPACE]){
+            std::cout << "pickup plant" << std::endl;
+        }
+    
         player1.update(deltaTime, frameCount);
+
+        //
+        // SPAWN IN PLANTS
+        if(frameCount % 300 == 0){
+            int randX = (rand() % (WINDOW_WIDTH/2 - 1)) + 0;
+            int randY = (rand() % ((GROUND_TOP*2 + 32) - (GROUND_TOP*2-32) + 1)) + (GROUND_TOP*2-32);
+
+            std::cout << randX << ", " << randY << std::endl;
+
+            plants.push_back(Plant(Vector2f(randX, randY), sproutTexture, 2));
+        }
+        //
+        //
+
 
         window.clear();
         
@@ -122,6 +148,10 @@ int main(int argv, char* args[]) {
 
         for(Entity& e : topSoil){
             window.render(e);
+        }
+
+        for(Plant& p : plants){
+            window.render(p);
         }
 
         window.render(cloud);

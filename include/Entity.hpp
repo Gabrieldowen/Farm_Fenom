@@ -95,6 +95,7 @@ class Player : public Entity {
                 }
             }
 
+
             // reset direction vector after moving in that direction
             directionVector = Vector2f(0, 0);
 
@@ -106,4 +107,13 @@ class Player : public Entity {
 
         private:
             Vector2f directionVector;
+};
+
+class Plant : public Entity {
+    public:
+        Plant(Vector2f p_pos, SDL_Texture* p_tex, int p_spriteScale = 4) : Entity(p_pos, p_tex, p_spriteScale) 
+        {
+        }   
+
+    
 };
