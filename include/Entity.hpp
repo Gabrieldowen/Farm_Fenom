@@ -47,7 +47,7 @@ class Entity
 
     protected:
         Vector2f pos;
-        float velocity = 100.0f;
+        float velocity = 200.0f;
         SDL_Rect currentFrame;
         SDL_Texture* tex;
         int spriteScale;
@@ -56,6 +56,9 @@ class Entity
 
 class Player : public Entity {
     public:
+        bool hasItem = false;
+
+
         Player(Vector2f p_pos, SDL_Texture* p_tex, int p_spriteScale = 4) : Entity(p_pos, p_tex, p_spriteScale) {
             std::cout << "player created" << std::endl;
         }   
@@ -105,7 +108,6 @@ class Player : public Entity {
 
         private:
             Vector2f directionVector;
-            // bool hasItem;
 };
 
 class Plant : public Entity {

@@ -15,7 +15,7 @@ struct Vector2f
 
     void print()
     {
-        std::cout << x * 4<< ", " << y * 4 << std::endl;
+        std::cout << x << ", " << y << std::endl;
     }
 
     void add(Vector2f p_v){
