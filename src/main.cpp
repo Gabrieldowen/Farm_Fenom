@@ -37,6 +37,8 @@ int main(int argv, char* args[]) {
     SDL_Texture* playerOneTexture = window.loadTexture("res/images/player_1.png");
     SDL_Texture* cloudTexture = window.loadTexture("res/images/cloud.png");
     SDL_Texture* sproutTexture = window.loadTexture("res/images/sprout_1.png");
+    SDL_Texture* truckTexture = window.loadTexture("res/images/truck_1.png");
+    SDL_Texture* carrotTexture = window.loadTexture("res/images/carrot.png");
 
 
 
@@ -53,12 +55,13 @@ int main(int argv, char* args[]) {
 
 
 
-
-
     Entity sky(Vector2f(0, 0), skyTexture, 128);
     Entity cloud(Vector2f(4, 4), cloudTexture, 8);
+    Entity truck(Vector2f(WINDOW_WIDTH-192, WINDOW_HEIGHT - 224), truckTexture, 6);
+    Entity carrot(Vector2f(-128, -128), carrotTexture);
 
     Player player1(Vector2f(SRES, GROUND_TOP - 128), playerOneTexture);
+
 
 
 
@@ -128,7 +131,6 @@ int main(int argv, char* args[]) {
                 // std::cout << "//" << p.getPos().x + SRES*p.getSpriteScale()/2 << ", " << p.getPos().y + SRES*p.getSpriteScale() << " vs "
                 // << player1.getPos().x + SRES*player1.getSpriteScale()/2 << ", " <<player1.getPos().y + SRES*player1.getSpriteScale() << "//" << endl;
                 // std::cout << endl;
-
                 if(    p.getPos().x + SRES*p.getSpriteScale()/2 >= player1.getPos().x + SRES*player1.getSpriteScale()/2 - 25
                     && p.getPos().x + SRES*p.getSpriteScale()/2 <= player1.getPos().x + SRES*player1.getSpriteScale()/2 + 25
                     && p.getPos().y + SRES*p.getSpriteScale() >= player1.getPos().y + SRES*player1.getSpriteScale() - 25
@@ -141,8 +143,13 @@ int main(int argv, char* args[]) {
                     }
             }
         }
+        if (keystates[SDL_SCANCODE_Q] && player1.hasItem){
+            player1.hasItem = false;
+        }
+
+
     
-        player1.update(deltaTime, frameCount);
+        player1.update(deltaTime, frameCount, carrot);
 
         //
         // SPAWN IN PLANTS
@@ -163,6 +170,7 @@ int main(int argv, char* args[]) {
 
         // render objects
         window.render(sky);
+        window.render(cloud);
 
         for(Entity& e : topSoil){
             window.render(e);
@@ -172,9 +180,10 @@ int main(int argv, char* args[]) {
             window.render(p);
         }
 
-        window.render(cloud);
-
+        window.render(truck);
+        window.render(carrot);
         window.render(player1);
+
         
         window.display();
 

@@ -63,12 +63,13 @@ class Player : public Entity {
             std::cout << "player created" << std::endl;
         }   
     
-        void update(float deltaTime, int frameCount){
+        void update(float deltaTime, int frameCount, Entity& item){
             
             // move the player
             directionVector.normalize();
             pos.x += directionVector.x * velocity * deltaTime;
             pos.y += directionVector.y * velocity * deltaTime;
+
 
             // bounds for the player
             if(pos.x < 0) pos.x = 0;    //
@@ -77,15 +78,32 @@ class Player : public Entity {
             if(pos.y < GROUND_TOP - currentFrame.h * getSpriteScale()) pos.y = GROUND_TOP - currentFrame.h * getSpriteScale(); //
             if(pos.y > WINDOW_HEIGHT - currentFrame.h * getSpriteScale()) pos.y = (WINDOW_HEIGHT - currentFrame.h * getSpriteScale());
 
+
+            // update item position with the player
+            if(hasItem){
+                item.setPos(Vector2f(pos.x, pos.y - SRES*spriteScale));
+            }
+
             // cycle through animation
             if (frameCount % 10 == 0){
                 // switches animation based on direction
                 if(directionVector.x > 0){
-                    setCurrentFrameY(32);
+                    if(hasItem){
+                        setCurrentFrameY(96);
+                    }
+                    else{
+                        setCurrentFrameY(32);
+                    }
                 }
                 else if(directionVector.x < 0){
-                    setCurrentFrameY(0);
+                    if(hasItem){
+                        setCurrentFrameY(64);
+                    }
+                    else{
+                        setCurrentFrameY(0);
+                    }
                 }
+                
                 
                 // if moving rotate
                 if(directionVector.y != 0 || directionVector.x != 0){
