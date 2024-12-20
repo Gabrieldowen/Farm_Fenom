@@ -26,3 +26,4 @@ libSDL2_ttf.a
 CMakeLists.txt.user
 Makefile
 /src/main.dSYM
+.DS_Store
